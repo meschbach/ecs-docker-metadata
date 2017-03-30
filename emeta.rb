@@ -17,4 +17,16 @@ class EMeta < Sinatra::Base
 	get "/pkcs7" do
 		HTTParty.get( "http://169.254.169.254/latest/dynamic/instance-identity/pkcs7", timeout: 1 ).body
 	end
+
+	get "/env" do
+		content_type 'text/plain'
+		`env`
+	end
+
+	get "/ecs" do
+		content_type 'text/plain'
+		url = "http://169.254.170.2" + ENV['AWS_CONTAINER_CREDENTIALS_RELATIVE_URI']
+		body = HTTParty.get( url, timeout: 1 ).body
+		url + "\n" + body
+	end
 end
